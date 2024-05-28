@@ -1,8 +1,8 @@
 <app-header>
   <a header-title class="navbar-brand">EverShop</a>
   <form header-actions class="d-flex" role="search">
-    <button type="button" class="btn" (click)="changePage('home')">Home</button>
-    <button type="button" class="btn" (click)="changePage('cart')">Cart</button>
+    <a type="button" class="btn" routerLink="/home">Home</a>
+    <a type="button" class="btn" routerLink="/cart">Cart</a>
     <input
       class="form-control me-2"
       type="search"
@@ -13,9 +13,5 @@
   </form>
 </app-header>
 <div class="container">
-  @if (currentPage === 'home') {
-  <app-home />
-  } @else if(currentPage === 'cart') {
-  <app-cart />
-  }
+  <router-outlet></router-outlet>
 </div>

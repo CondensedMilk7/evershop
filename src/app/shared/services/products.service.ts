@@ -22,4 +22,8 @@ export class ProductsService {
     );
     this.cartProducts$.next(updatedProducts);
   }
+
+  getProductById(id: string) {
+    return this.products$.value.find((prod) => prod._id === id) || null;
+  }
 }
