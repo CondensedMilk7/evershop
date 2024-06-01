@@ -52,6 +52,9 @@
       id="email"
       formControlName="email"
     />
+    @if (controls.email.dirty && controls.email.errors) {
+      <div class="mt-1 text-danger">Must be a valid email</div>
+    }
   </div>
   <div class="mb-3">
     <label for="password" class="form-label">Password</label>
@@ -61,6 +64,11 @@
       id="password"
       formControlName="password"
     />
+    @if (controls.password.dirty && controls.password.errors) {
+      @if (controls.password.errors["minlength"]) {
+        <div class="mt-1 text-danger">Password is too short!</div>
+      }
+    }
   </div>
   <div class="mb-3">
     <label for="confirmPassword" class="form-label">Confirm Password</label>
@@ -70,6 +78,13 @@
       id="confirmPassword"
       formControlName="confirmPassword"
     />
+    @if (
+      controls.confirmPassword.dirty && signupForm.errors?.["passwordsMatch"]
+    ) {
+      <div class="mt-1 text-danger">
+        {{ signupForm.errors?.["passwordsMatch"] }}
+      </div>
+    }
   </div>
   <button class="btn btn-primary" type="submit" [disabled]="signupForm.invalid">
     Sign Up

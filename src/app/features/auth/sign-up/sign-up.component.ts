@@ -34,7 +34,7 @@ export class SignUpComponent implements OnInit {
       [Validators.required, Validators.maxLength(this.maxNameLength)],
     ],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', [Validators.required]],
   });
 
@@ -43,9 +43,16 @@ export class SignUpComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.controls.email.valueChanges.subscribe((value) => {
-      console.log(value);
-    });
+    // ერთი ვარიანტი - მხოლოდ კონტროლს ვალიდაცია...
+    // this.controls.confirmPassword.setValidators(
+    //   this.confirmPasswordValidator(this.controls.password),
+    // );
+    // this.controls.password.valueChanges.subscribe(() => {
+    //   this.controls.confirmPassword.updateValueAndValidity();
+    // });
+
+    // მეორე ვარიანტი - მთელი ფორმის ჯგუფის ვალიდაცია
+    this.signupForm.addValidators(this.passwordsMatchValidator());
   }
 
   onAutofill() {
@@ -70,6 +77,25 @@ export class SignUpComponent implements OnInit {
       return control.value.includes(pattern)
         ? { badName: `pattern "${pattern}" is prohibited!` }
         : null;
+    };
+  }
+
+  // confirmPasswordValidator(compareTo: FormControl<string | null>): ValidatorFn {
+  //   return (control: AbstractControl<string>): ValidationErrors | null => {
+  //     return control.value === compareTo.value
+  //       ? null
+  //       : { confirmPassword: 'Passwords do not match!' };
+  //   };
+  // }
+  //
+
+  passwordsMatchValidator() {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return control.value.password === control.value.confirmPassword
+        ? null
+        : {
+            passwordsMatch: 'Passwords do not match!',
+          };
     };
   }
 }

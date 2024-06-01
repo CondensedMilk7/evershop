@@ -3,43 +3,28 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 import { FormsModule } from '@angular/forms';
 import { ProductsFilterPipe } from '../../shared/pipes/products-filter.pipe';
 import { ProductsService } from '../../shared/services/products.service';
-import { Product } from '../../shared/types/product';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AsyncPipe } from '@angular/common';
 
 type Direction = 'asc' | 'desc';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ProductCardComponent, FormsModule, ProductsFilterPipe],
+  imports: [ProductCardComponent, FormsModule, ProductsFilterPipe, AsyncPipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
-  priceSort: Direction = 'asc';
-  products: Product[] = [];
+  private readonly productsService = inject(ProductsService);
 
-  constructor(private productsService: ProductsService) {}
+  products$ = this.productsService.products$;
+  priceSort: Direction = 'asc';
 
   ngOnInit(): void {
-    this.productsService.products$.subscribe((products) => {
-      this.products = products;
-    });
-    this.activatedRoute.queryParamMap.subscribe((queryParamMap) => {
-      const direction = queryParamMap.get('priceSort') as Direction | null;
-      if (direction) {
-        this.priceSort = direction;
-        this.products = this.products.sort((a, b) => {
-          if (direction === 'desc') {
-            return b.price.current - a.price.current;
-          } else {
-            return a.price.current - b.price.current;
-          }
-        });
-      }
-    })
+    this.productsService.getProducts({ page_size: 40, page_index: 1 });
   }
 
   onAddToCart(id: string) {
