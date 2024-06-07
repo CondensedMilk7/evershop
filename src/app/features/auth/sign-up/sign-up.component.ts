@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { Gender } from '../../../shared/types/user';
 import { AuthService } from '../../../shared/services/auth.service';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',

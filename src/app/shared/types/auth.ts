@@ -16,3 +16,8 @@ export interface SignUpRequest {
 export interface SignUpForm extends SignUpRequest {
   confirmPassword: string;
 }
+
+export interface AuthErrors {
+  signUp: string;
+  signIn: string;
+}

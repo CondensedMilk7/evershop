@@ -5,8 +5,6 @@ import { ProductsFilterPipe } from '../../shared/pipes/products-filter.pipe';
 import { ProductsService } from '../../shared/services/products.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
-import { map } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type Direction = 'asc' | 'desc';
 

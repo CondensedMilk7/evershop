@@ -7,3 +7,8 @@ export interface GetProductsResponse {
   skip: number;
   products: Product[];
 }
+
+export interface SignInResponse {
+  access_token: string;
+  refresh_token: string;
+}

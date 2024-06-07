@@ -1,9 +1,27 @@
 <app-header>
-  <a header-title class="navbar-brand">EverShop</a>
+  <a header-title class="navbar-brand">
+    @if (user$ | async; as user) {
+      Welcome to EverShop, {{ user.firstName }}
+    } @else {
+      EverShop
+    }
+  </a>
   <form header-actions class="d-flex" role="search">
-    <a type="button" class="btn" routerLink="/auth" routerLinkActive="active">Auth</a>
-    <a type="button" class="btn" routerLink="/home" routerLinkActive="active">Home</a>
-    <a type="button" class="btn" routerLink="/cart" routerLinkActive="active">Cart</a>
+    @if (user$ | async) {
+      <button type="button" class="btn" (click)="authService.signOut()">
+        Sign Out
+      </button>
+    } @else {
+      <a type="button" class="btn" routerLink="/auth" routerLinkActive="active"
+        >Auth</a
+      >
+    }
+    <a type="button" class="btn" routerLink="/home" routerLinkActive="active"
+      >Home</a
+    >
+    <a type="button" class="btn" routerLink="/cart" routerLinkActive="active"
+      >Cart</a
+    >
     <input
       class="form-control me-2"
       type="search"
