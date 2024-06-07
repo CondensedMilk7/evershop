@@ -1,24 +1,30 @@
-import { JsonPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe, TitleCasePipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Gender } from '../../../shared/types/user';
+import { AuthService } from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [ReactiveFormsModule, JsonPipe],
+  imports: [ReactiveFormsModule, JsonPipe, TitleCasePipe, AsyncPipe],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent implements OnInit {
   private readonly maxNameLength = 16;
-  private readonly fb = inject(FormBuilder);
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly authService = inject(AuthService);
+
+  readonly isLoading$ = this.authService.isLoading$;
+  readonly genderOptions = [Gender.Male, Gender.Female, Gender.Other];
 
   signupForm = this.fb.group({
     firstName: [
@@ -36,6 +42,12 @@ export class SignUpComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', [Validators.required]],
+    address: ['', [Validators.required]],
+    phone: ['', [Validators.required]],
+    zipcode: ['', [Validators.required]],
+    avatar: ['', []],
+    gender: [Gender.Other, [Validators.required]],
+    age: [18, [Validators.required, Validators.min(18)]],
   });
 
   get controls() {
@@ -55,21 +67,9 @@ export class SignUpComponent implements OnInit {
     this.signupForm.addValidators(this.passwordsMatchValidator());
   }
 
-  onAutofill() {
-    // ცალკე კონტროლებზე
-    // this.controls.firstName.setValue("John");
-    // this.controls.lastName.setValue("Doe");
-
-    // FormGroup-ით
-    this.signupForm.patchValue({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'johndoe@mail.com',
-    });
-  }
-
   onSubmt() {
-    console.log(this.signupForm.value);
+    const signUpData = this.signupForm.getRawValue();
+    this.authService.signUp(signUpData);
   }
 
   badNameValidator(pattern: string): ValidatorFn {

@@ -1,4 +1,9 @@
 <form>
+  @if (isSignUpSuccess) {
+    <div class="mb-3 alert alert-success" role="success">
+      Account created successfully. You can now sign in!
+    </div>
+  }
   <div class="mb-3">
     <label for="email" class="form-label">Email address</label>
     <input
@@ -11,7 +16,7 @@
       required
       #emailCtrl="ngModel"
     />
-    @if (emailCtrl.dirty && !email.includes('@')) {
+    @if (emailCtrl.dirty && !email.includes("@")) {
       <div class="mt-1 text-danger">Email is required!</div>
     }
   </div>
@@ -49,7 +54,5 @@
   >
     Sign in
   </button>
-  <div class="mt-5">
-    New here? <a routerLink="/auth/sign-up">Sign up!</a>
-  </div>
+  <div class="mt-5">New here? <a routerLink="/auth/sign-up">Sign up!</a></div>
 </form>

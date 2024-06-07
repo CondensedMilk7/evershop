@@ -3,8 +3,10 @@ import { ProductCardComponent } from '../../shared/components/product-card/produ
 import { FormsModule } from '@angular/forms';
 import { ProductsFilterPipe } from '../../shared/pipes/products-filter.pipe';
 import { ProductsService } from '../../shared/services/products.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import { map } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 type Direction = 'asc' | 'desc';
 
@@ -25,6 +27,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.productsService.getProducts({ page_size: 40, page_index: 1 });
+    this.activatedRoute.queryParamMap.subscribe((paramMap) => {
+      console.log(paramMap.get('priceSort'));
+    });
   }
 
   onAddToCart(id: string) {
