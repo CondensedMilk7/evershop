@@ -13,12 +13,17 @@
     <p class="card-text text-secondary">
       Issue Date: {{ product.issueDate | date: "yyyy" }}
     </p>
+    <p>Stock: {{ product.stock }}</p>
     @if (deleteBtnVisible) {
       <button class="btn btn-danger" (click)="deleteProduct.emit(product._id)">
         Delete
       </button>
     } @else {
-      <button class="btn btn-primary" (click)="addToCart.emit(product._id)">
+      <button
+        class="btn btn-primary"
+        [disabled]="product.stock <= 0"
+        (click)="addToCart.emit(product._id)"
+      >
         Add To Cart
       </button>
     }

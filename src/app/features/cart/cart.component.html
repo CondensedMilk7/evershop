@@ -1,7 +1,9 @@
-@for (product of cartProducts$ | async; track product._id) {
-<app-product-card
-  [product]="product"
-  [deleteBtnVisible]="true"
-  (deleteProduct)="onDeleteProduct($event)"
-></app-product-card>
+@if (cart$ | async; as cart) {
+  <ul>
+    @for (product of cart.products; track product.productId) {
+      <li>{{ product.productId }}</li>
+    }
+  </ul>
+} @else {
+  <p>Your cart is empty.</p>
 }

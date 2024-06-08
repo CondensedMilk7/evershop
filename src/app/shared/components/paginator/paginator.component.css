@@ -1,0 +1,10 @@
+.paginator {
+  padding: 16px 0;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.paginator select {
+  max-width: 200px;
+}

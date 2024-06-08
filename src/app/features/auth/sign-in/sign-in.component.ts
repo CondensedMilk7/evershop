@@ -12,23 +12,18 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css',
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
 
   errorMessage$ = this.authService.errors$.pipe(map((error) => error.signIn));
   isLoading$ = this.authService.isLoading$;
-  isSignUpSuccess = false;
+  isSignUpSuccess$ = this.activatedRoute.queryParamMap.pipe(
+    map((queryParamMap) => Boolean(queryParamMap.get('signUpSuccess'))),
+  );
   email = '';
   password = '';
   keepSignedIn = false;
-
-  ngOnInit(): void {
-    this.activatedRoute.queryParamMap.subscribe((queryParamMap) => {
-      this.isSignUpSuccess = Boolean(queryParamMap.get('signUpSuccess'));
-    });
-  }
-
   onSignIn() {
     console.log('clicked');
     this.authService.signIn(this.email, this.password);

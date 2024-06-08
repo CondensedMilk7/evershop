@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { PRODUCTS } from '../../mock-data';
-import { Product, ProductDetails } from '../types/product';
+import { Product, ProductDetails, ProductPagination } from '../types/product';
 import { BehaviorSubject } from 'rxjs';
 import { ENVIRONMENT } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -15,14 +15,11 @@ export class ProductsService {
 
   products$ = new BehaviorSubject<Product[]>([]);
   cartProducts$ = new BehaviorSubject<Product[]>([]);
-
-  addToCart(productId: string) {
-    const product = this.products$.value.find((prod) => prod._id === productId);
-    if (product) {
-      const updatedCart = [...this.cartProducts$.value, product];
-      this.cartProducts$.next(updatedCart);
-    }
-  }
+  productPagination$ = new BehaviorSubject<ProductPagination>({
+    pageIndex: 1,
+    pageSize: 10,
+    total: 0,
+  });
 
   deleteFromCart(id: string) {
     const updatedProducts = this.cartProducts$.value.filter(
@@ -44,6 +41,11 @@ export class ProductsService {
       })
       .subscribe((response) => {
         this.products$.next(response.products);
+        this.productPagination$.next({
+          pageIndex: response.page,
+          pageSize: response.limit,
+          total: response.total,
+        });
       });
   }
 }

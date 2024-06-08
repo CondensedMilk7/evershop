@@ -1,5 +1,5 @@
 <form>
-  @if (isSignUpSuccess) {
+  @if (isSignUpSuccess$ | async) {
     <div class="mb-3 alert alert-success" role="success">
       Account created successfully. You can now sign in!
     </div>

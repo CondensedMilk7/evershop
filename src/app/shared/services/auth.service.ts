@@ -7,6 +7,7 @@ import { Router, UrlTree } from '@angular/router';
 import { SignInResponse } from '../types/response';
 import { ApiError } from '../types/api-error';
 import { User } from '../types/user';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -89,8 +90,9 @@ export class AuthService {
       .subscribe(({ access_token, refresh_token }) => {
         this.accessToken = access_token;
         this.refreshToken = refresh_token;
-
+        console.log(access_token, refresh_token);
         const user = this.parseJwt(access_token);
+        console.log(user);
         this.user$.next(user);
         this.isLoading$.next(false);
         this.router.navigate(['/']);
@@ -106,8 +108,7 @@ export class AuthService {
 
   parseJwt(token: string): User | null {
     try {
-      const decoded = atob(token.split('.')[1]);
-      return JSON.parse(decoded);
+      return jwtDecode(token);
     } catch {
       return null;
     }

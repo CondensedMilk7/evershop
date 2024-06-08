@@ -35,3 +35,9 @@ export interface Rating {
   value: number;
   createdAt: string;
 }
+
+export interface ProductPagination {
+  pageSize: number;
+  pageIndex: number;
+  total: number;
+}
